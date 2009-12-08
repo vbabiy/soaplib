@@ -66,7 +66,16 @@ class test(unittest.TestCase):
         integer = Integer()
         element = Integer.to_xml(i)
         self.assertEquals(element.text, '12')
-        self.assertEquals('xs:int', element.get(ns.get('xsi') + 'type'))
+        self.assertEquals('xs:integer', element.get(ns.get('xsi') + 'type'))
+        value = integer.from_xml(element)
+        self.assertEquals(value, i)
+
+    def test_large_integer(self):
+        i = 128375873458473
+        integer = Integer()
+        element = Integer.to_xml(i)
+        self.assertEquals(element.text, '128375873458473')
+        self.assertEquals('xs:integer', element.get(ns.get('xsi') + 'type'))
         value = integer.from_xml(element)
         self.assertEquals(value, i)
 
@@ -95,7 +104,7 @@ class test(unittest.TestCase):
 
     def test_null(self):
         element = Null.to_xml('doesnt matter')
-        self.assertEquals('1', element.get(ns.get('xs') + 'null'))
+        self.assertEquals('1', element.get(ns.get('xs') + 'nil'))
         value = Null.from_xml(element)
         self.assertEquals(None, value)
 
@@ -122,7 +131,7 @@ class test(unittest.TestCase):
         self.assertEquals('xs:boolean', b.get(ns.get('xsi') + 'type'))
 
         b = Boolean.to_xml(None)
-        self.assertEquals('1', b.get(ns.get('xs') + 'null'))
+        self.assertEquals('1', b.get(ns.get('xs') + 'nil'))
 
         b = Boolean.from_xml(b)
         self.assertEquals(b, None)
